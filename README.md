@@ -14,6 +14,7 @@ Bindings to [jpegoptim](http://www.kokkonen.net/tjko/projects.html), [jpeglib](h
 ## Installation
 
 You can install the latest tag via npm:
+
 	npm install git://github.com/coolbong/node-jpegoptim.git
 
 
