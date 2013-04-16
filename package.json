@@ -1,0 +1,36 @@
+{
+   "name": "jpegoptim",
+   "version": "0.0.1",
+   "main":"./lib/jpegoptim",
+   "description": "A C++ module for node-js optimizes jpeg image",
+   "keywords": [
+       "jpeg",
+       "jpg",
+       "image",
+       "optimze"
+   ],
+   "author": {
+       "name": "coolbong",
+       "email": "coolbong.works@gmail.com"
+   },
+   "license": {
+       "type": "MIT"
+   },
+   "devDependencies": {
+
+   },
+   "repository": {
+       "type": "git",
+       "url": "http://github.com/" 
+   },
+   "directories": {
+       "examples": "examples",
+       "src": "src"
+   },
+   "engines": {
+       "node": ">=0.10.0"
+   },
+   "scripts": {
+       "install": "node-gyp configure build"
+   }
+}
