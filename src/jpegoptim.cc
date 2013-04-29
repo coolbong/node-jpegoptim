@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 
+#include <jpeglib.h>
+
 #include "optimize.h"
 #include "jpeginfo.h"
 
@@ -102,7 +104,7 @@ Handle<Value> LossLess(const Arguments& args)
 	return scope.Close(Number::New(ret));
 }
 
-Handle<Value> GetWidth(const Arguments& args)
+Handle<v8::Value> GetInfo(const v8::Arguments &args)
 {
 	HandleScope scope;
 
@@ -110,49 +112,33 @@ Handle<Value> GetWidth(const Arguments& args)
 		return ThrowException(Exception::TypeError(String::New("At least 1 arguments required - file path")));
 	}
 
-	//if(args[0].Length() < 1 || !args[0]->IsString()) {
 	if(!args[0]->IsString()) {
 		return ThrowException(Exception::TypeError(String::New("first arguments must be file path")));
 	}
 
 	std::string inputfile = TOSTR(args[0]);
 
-	int width = getWidth(inputfile.c_str());
+	struct jpeg_decompress_struct dinfo;
+	int ret = getJpegHeaderInfo(inputfile.c_str(), &dinfo);
 
-	return scope.Close(Number::New(width));
-}
+	if(ret == 0) {
+		Local<Object> image = Object::New();
 
-Handle<Value> GetHeight(const Arguments& args)
-{
-	HandleScope scope;
-
-	if(args.Length() < 1) {
-		return ThrowException(Exception::TypeError(String::New("At least 1 arguments required - file path")));
+		image->Set(String::New("width"), Integer::New(dinfo.image_width));
+		image->Set(String::New("height"), Integer::New(dinfo.image_height));
+		image->Set(String::New("colordepth"), Integer::New(dinfo.num_components * 8));
+		return scope.Close(image);
+	} else {
+		return scope.Close(Undefined());
 	}
 
-	//if(args[0].Length() < 1 || !args[0]->IsString()) {
-	if(!args[0]->IsString()) {
-		return ThrowException(Exception::TypeError(String::New("first arguments must be file path")));
-	}
-
-	std::string inputfile = TOSTR(args[0]);
-
-	int height = getHeight(inputfile.c_str());
-
-	return scope.Close(Number::New(height));
 }
-
-
-
-
-
 
 void init(Handle<Object> exports)
 {
 	exports->Set(String::NewSymbol("optimize"),FunctionTemplate::New(Optimize)->GetFunction());
 	exports->Set(String::NewSymbol("lossless"),FunctionTemplate::New(LossLess)->GetFunction());
-	exports->Set(String::NewSymbol("getWidth"),FunctionTemplate::New(GetWidth)->GetFunction());
-	exports->Set(String::NewSymbol("getHeight"),FunctionTemplate::New(GetHeight)->GetFunction());
+	exports->Set(String::NewSymbol("getInfo"),FunctionTemplate::New(GetInfo)->GetFunction());
 }
 
 NODE_MODULE(jpegoptim, init);

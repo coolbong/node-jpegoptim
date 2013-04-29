@@ -8,8 +8,8 @@ extern "C" {
 
 int getWidth(const char* inputfilename);
 int getHeight(const char* infputfilename);
-int getBitDepth(const char* inputfilename);
-int getJpegHeaderInfo(const char inputfilename, struct jpeg_decompress_struct *dinfo) ;
+int getColorDepth(const char* inputfilename);
+int getJpegHeaderInfo(const char *inputfilename, struct jpeg_decompress_struct *dinfo) ;
 
 #if defined(__cplusplus)
 }

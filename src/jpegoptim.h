@@ -16,13 +16,12 @@ public:
 
     static v8::Handle<v8::Value> Optimize(const v8::Arguments &args);
     static v8::Handle<v8::Value> LossLess(const v8::Arguments &args);
-    static v8::Handle<v8::Value> GetWidth(const v8::Arguments& args);
-    static v8::Handle<v8::Value> GetHeight(const v8::Arguments& args);
-
+    static v8::Handle<v8::Value> GetInfo(const v8::Arguments &args);
 
 private:
     int width;
     int height;
+    int colordepth;
     
     int fileSize;
     std::string fileName;
